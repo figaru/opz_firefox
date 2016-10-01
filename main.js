@@ -3,13 +3,15 @@ var panels = require("sdk/panel");
 var self = require("sdk/self");
 var base64 = require("./imports/base64");
 var startup = require("./imports/startup.js");
+var storage = require("./imports/storage.js");
+
 
 var panel = panels.Panel({
   contentURL: self.data.url("panel/panel.html"),
 });
 
 panel.on("*", function(e) {
-  console.log("event " + e + " was emitted");
+  //console.log("event " + e + " was emitted");
 });
 
 var button = ui.ActionButton({
@@ -33,8 +35,10 @@ function handleClick(state) {
 exports.main = function (options, callbacks) {
 
 	if(startup.init(options.loadReason)){
-		console.log("Addon synced");
+		//console.log("Addon synced");
 	}
+
+	storage.init();
 	
 };
 
