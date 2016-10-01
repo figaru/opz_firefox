@@ -3,7 +3,7 @@
   "name": "opzfirefox",
   "version": "0.0.1",
   "description": "Opz firefox addon",
-  "main": "index.js",
+  "main": "main.js",
   "author": "Daniel Abrantes",
   "engines": {
     "firefox": ">=38.0a1",
