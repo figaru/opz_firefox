@@ -18,11 +18,11 @@ function init(){
 				synced: Math.floor((new Date).getTime()/1000),
 			},
 			user:{
-				name: "Daniel Abrantes",
-				email: "test@test.com",
+				name: undefined,
+				email: undefined,
 			},
 			settings:{
-				token: "f6bd64fd-af5e-d965-9da3-0bc9684b85f1",
+				token: undefined,
 				privateDays: [],
 				privateHours: [],
 			}

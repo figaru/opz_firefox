@@ -1,3 +1,23 @@
-<div>
-	panel
-</div>
+<html>
+	<head>
+		<link href="panel.css" rel="stylesheet">
+		<script src="jquery.min.js"></script>
+		<script src="panel.js"></script>
+	</head>
+	<body>
+	    <div class="panel action-auth">
+
+	    	<div class="sync">
+	    		loading...
+	    	</div>
+	    	<div class="login">
+				<form class="js-login">
+					<div>Please log in.</div><br>
+					<label>Username:</label> <input class="input" id="login_user" type="text" name="uname"><br>
+					<label>Password:</label> <input class="input" id="login_pass" type="password" name="pword"><br>
+					<input type="submit" name="submit" value="Log in">
+				</form>
+			</div>
+		</div>
+  	</body>
+</html>
