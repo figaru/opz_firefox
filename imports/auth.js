@@ -2,7 +2,12 @@ var cred = require("sdk/passwords");
 var request = require("./requests.js");
 
 function init(){
-	//addCred();
+	//addCred()
+	checkCredentials().then(exists => {
+		console.log(exists);
+	}).catch(error => {
+		console.log(error);
+	});
 }
 
 function userLoggin(data){
@@ -26,6 +31,7 @@ function syncSettings(){
 function addCredentials(){
 	cred.store({
 	  realm: "Opz Addon",
+	  username: "test",
 	  password: "SeCrEt123",
 	  onComplete: function onComplete() {
 	    console.log("Credentials have been added");
@@ -40,10 +46,12 @@ function addCredentials(){
 function updateCredentials(){
 	require("sdk/passwords").remove({
 	  realm: "Opz Addon",
+	  username: "test",
 	  password: "SeCrEt123",
 	  onComplete: function onComplete() {
 	    require("sdk/passwords").store({
 	      realm: "Opz Addon",
+	      username: "test",
 	      password: "{new password}"
 	    })
 	  },
@@ -53,15 +61,22 @@ function updateCredentials(){
 	});
 }
 
-function showCredentials(params) {
-  	cred.search({
-//	    username: params.username,
-	    onComplete: function onComplete(credentials) {
-	      	credentials.forEach(function(credential) {
-	        	console.log(credential.username);
-	        	console.log(credential.password);
-	        });
-	    }
+function checkCredentials() {
+	return new Promise(function (resolve, reject) {
+        cred.search({
+		    realm: "Opz Addon",
+		    onComplete: function onComplete(credentials) {
+		    	if(credentials.length > 0){
+		    		resolve(true);
+		    	}else{
+		    		reject(false);
+		    	}
+		      	// credentials.forEach(function(credential) {
+		       //  	console.log(credential.username);
+		       //  	console.log(credential.password);
+		       //  });
+			}
+	    });
     });
 }
 
