@@ -5,7 +5,7 @@ var storage = require("./imports/storage.js");
 var panel = require("./imports/panel.js");
 var request = require("./imports/requests.js");
 var auth = require("./imports/auth.js");
-
+const {XMLHttpRequest} = require("sdk/net/xhr");
 
 // a dummy function, to show how tests work.
 // to see how to test this function, look at test/test-index.js
@@ -17,7 +17,6 @@ exports.main = function (options, callbacks) {
 	}
 	storage.init();
 	auth.init();
-	//request.post("nothing");
 	
 };
 

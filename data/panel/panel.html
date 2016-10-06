@@ -5,7 +5,7 @@
 		<script src="panel.js"></script>
 	</head>
 	<body>
-	    <div class="panel action-sync">
+	    <div class="panel">
 
 	    	<div class="sync">
 	    		<div class="loader">
@@ -13,10 +13,10 @@
 	    		</div>
 	    	</div>
 	    	<div class="login">
-				<form class="js-login">
+				<form class="js-login" action="http://192.168.178.104:5000/v1/auth">
 					<div>Please log in.</div><br>
-					<label>Username:</label> <input class="input" id="login_user" type="text" name="uname"><br>
-					<label>Password:</label> <input class="input" id="login_pass" type="password" name="pword"><br>
+					<label>Username:</label> <input class="input" id="login_user" type="text" name="user"><br>
+					<label>Password:</label> <input class="input" id="login_pass" type="password" name="pass"><br>
 					<input type="submit" name="submit" value="Log in">
 				</form>
 			</div>

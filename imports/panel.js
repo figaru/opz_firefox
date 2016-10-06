@@ -1,6 +1,7 @@
 var self = require("sdk/self");
 var panels = require("sdk/panel");
 var ui = require("sdk/ui");
+var auth = require("./auth.js");
 
 var panel = panels.Panel({
   contentURL: self.data.url("panel/panel.html"),
@@ -10,6 +11,10 @@ var panel = panels.Panel({
 
 panel.on("*", function(e) {
   //console.log("event " + e + " was emitted");
+});
+
+panel.port.on("sync", function(data){
+  auth.logIn(data.data);
 });
 
 var button = ui.ActionButton({

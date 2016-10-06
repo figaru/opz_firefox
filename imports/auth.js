@@ -1,14 +1,31 @@
 var cred = require("sdk/passwords");
+var request = require("./requests.js");
 
 function init(){
 	//addCred();
 }
 
+function userLoggin(data){
+	var url = "http://192.168.178.104:5000/v1/auth?" + data;
+
+    // The function returns a promise
+	// so we can chain with a .then and a .catch
+	request.get(url).then(json => {
+		var result = JSON.parse(json);
+
+		console.log(result);
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+function syncSettings(){
+	console.log("Synchronizing settings...");
+}
+
 function addCredentials(){
 	cred.store({
-	  url: "http://www.example.com",
-	  realm: "ExampleCo Login",
-	  username: "joe",
+	  realm: "Opz Addon",
 	  password: "SeCrEt123",
 	  onComplete: function onComplete() {
 	    console.log("Credentials have been added");
@@ -22,13 +39,11 @@ function addCredentials(){
 
 function updateCredentials(){
 	require("sdk/passwords").remove({
-	  realm: "User Registration",
-	  username: "joe",
+	  realm: "Opz Addon",
 	  password: "SeCrEt123",
 	  onComplete: function onComplete() {
 	    require("sdk/passwords").store({
-	      realm: "User Registration",
-	      username: "joe",
+	      realm: "Opz Addon",
 	      password: "{new password}"
 	    })
 	  },
@@ -38,28 +53,18 @@ function updateCredentials(){
 	});
 }
 
-function checkCredentials(){
-
-}
-
-function checkSettings(){
-
-}
-
-function syncSettings(){
-
-}
-
-function showCredentials() {
-  cred.search({
-    username: "joe",
-    onComplete: function onComplete(credentials) {
-      credentials.forEach(function(credential) {
-        console.log(credential.username);
-        console.log(credential.password);
-        });
-      }
+function showCredentials(params) {
+  	cred.search({
+//	    username: params.username,
+	    onComplete: function onComplete(credentials) {
+	      	credentials.forEach(function(credential) {
+	        	console.log(credential.username);
+	        	console.log(credential.password);
+	        });
+	    }
     });
 }
 
 exports.init = init;
+exports.logIn = userLoggin;
+exports.sync = syncSettings;
