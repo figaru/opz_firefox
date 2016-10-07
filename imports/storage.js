@@ -7,16 +7,6 @@ function init(){
 		console.log("Populating Database");
 		//empty storage - populate databse with correct fields
 		db.storage.addon = {
-			api: {
-				log: "http://opz.io/v1/logs",
-				sync: "http://opz.io/v1/logs",
-				update: "http://opz.io/v1/logs"
-			},
-			timestamps: {
-				updated: Math.floor((new Date).getTime()/1000),
-				created: Math.floor((new Date).getTime()/1000),
-				synced: Math.floor((new Date).getTime()/1000),
-			},
 			user:{
 				name: undefined,
 				email: undefined,
@@ -27,8 +17,20 @@ function init(){
 				privateHours: [],
 			}
 		}
-	}else{
-		console.log("Database Sync With Server - Succeeded");
+	}
+}
+
+function updateSettings(params){
+	db.storage.addon = {
+		user:{
+			name: undefined,
+			email: params.user,
+		},
+		settings:{
+			token: params.user.token,
+			privateDays: params.settings.privateDays,
+			privateHours: params.settings.privateHours,
+		}
 	}
 }
 
@@ -48,3 +50,4 @@ function addField(params){
 }
 
 exports.init = init;
+exports.sync = updateSettings;

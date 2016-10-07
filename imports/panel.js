@@ -14,7 +14,7 @@ panel.on("*", function(e) {
 });
 
 panel.port.on("sync", function(data){
-  auth.logIn(data.data);
+  auth.logIn(data);
 });
 
 var button = ui.ActionButton({
