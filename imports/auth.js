@@ -2,51 +2,87 @@ var cred = require("sdk/passwords");
 var request = require("./requests.js");
 var storage = require("./storage.js");
 
-function init(){
-	//addCred()
-	//check if user login details are already stored
-	checkCredentials().then(data => {
-
-	}).catch(error => {
-		
-	});
+function init() {
+	return new Promise(function (resolve, reject) {
+        //check if user login details are already stored
+		userSync().then(success => {
+			resolve(storage.settings());
+		}).catch(failed => {
+			if(failed === "noCred"){
+				reject("Login Required");
+			}
+		});
+    });
 }
 
 function userSync(){
+	return new Promise(function (resolve, reject) {
+		checkCredentials().then(data => {
+			var url = "http://192.168.178.104:5000/v1/sync?uid=" 
+				+ data.uid + "&session=" + data.session;
 
+		    //Async - wait for user settings from server
+			request.get(url).then(json => {
+				var result = JSON.parse(json);
+
+				storage.sync(result);
+
+				resolve(true);
+			}).catch(error => {
+				console.log("line 32: " + error);
+				reject(false);
+			});
+		}).catch(error => {
+			console.log("line 36: " + error);
+			reject("noCred");
+		});
+	});
 }
 
-function userLoggin(data){
-	var url = "http://192.168.178.104:5000/v1/auth?" + data.data;
+function userLogin(data){
+	return new Promise(function (resolve, reject) {
+		var url = "http://192.168.178.104:5000/v1/auth?" + data.data;
 
-    //Async - wait for user settings from server
-	request.get(url).then(json => {
-		var result = JSON.parse(json);
+	    //Async - wait for user settings from server
+		request.get(url).then(json => {
+			var result = JSON.parse(json);
 
-		console.log(result);
+			//check if user login details are already stored
+			checkCredentials().then(data => {
 
-		//check if user login details are already stored
-		checkCredentials().then(data => {
+				storage.sync(result);
 
-		}).catch(error => {
-			//setup create params
-			var params = {
-				user: data.cred.user,
-				pass: data.cred.pass,
-			}
-			//add credentials
-			addCredentials(params).then(data => {
-				console.log("Credentials Successfuly added!");
+				resolve(true);
 
 			}).catch(error => {
-				console.log(error);
+				//setup create params
+				var params = {
+					user: data.cred.user,
+					pass: data.cred.pass,
+					uid: result.uid,
+					session: result.session,
+				}
+				//add credentials
+				addCredentials(params).then(response => {
+					console.log(response);
+
+					storage.sync(result);
+
+					resolve(true);
+
+				}).catch(error => {
+					console.log("line 76: " + error);
+
+					reject(error);
+				});
 			});
+
+		}).catch(error => {
+			console.log(error);
+
+			reject(error);
 		});
-
-	}).catch(error => {
-		console.log(error);
 	});
-
 }
 
 function addCredentials(params) {
@@ -56,7 +92,7 @@ function addCredentials(params) {
 		  username: params.user,
 		  password: params.pass,
 		  onComplete: function onComplete() {
-		    resolve(true);
+		    resolve("Credentials Added Successfuly!");
 		  },
 		  onError: function onError(err){
 		  	reject(err);
@@ -84,11 +120,14 @@ function checkCredentials() {
         cred.search({
 		    realm: "Opz Addon",
 		    onComplete: function onComplete(credentials) {
-		    	if(credentials.length > 0){
-		    		resolve(credentials);
+		    	if(credentials.length >= 0){
+		    		resolve(credentials[0]);
 		    	}else{
 		    		reject("No credentials Found.");
 		    	}
+			},
+			onError: function(err){
+				reject("No credentials Found.");
 			}
 	    });
     });
@@ -115,5 +154,5 @@ function getCredentials() {
 
 
 exports.init = init;
-exports.logIn = userLoggin;
-exports.sync = syncSettings;
+exports.login = userLogin;
+exports.sync = userSync;

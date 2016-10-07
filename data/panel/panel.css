@@ -4,14 +4,14 @@ html,body{
 	overflow-x: hidden;
 }
 
-.panel{
+#panel{
 	width: 100%;
 	height: 100%;
 	display: block;
 	background-color: #f5f5f5;
 }
 
-.panel.action-sync > .sync{
+#panel.action-sync > .sync{
 	display: table;
 }
 
@@ -36,7 +36,7 @@ html,body{
 	height: 250px;
 }
 
-.panel.action-auth > .login{
+#panel.action-auth > .login{
 	display: block;
 }
 
@@ -48,4 +48,15 @@ html,body{
 		width: 100%;
 		padding: 10px;
 		border: 1px solid #ccc;
+	}
+
+
+#panel.action-home > .home{
+	display: block;
+}
+
+.home{
+	display: none;
+	width: 80%;
+	padding: 10%;
 	}

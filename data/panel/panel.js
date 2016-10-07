@@ -1,13 +1,19 @@
-self.port.on("onLoad", function(params){
-    if(params.session){
-        //auth.sync();
-    }else{
-        console.log("Log in required!");
+self.port.on("panel", function(params){
+    $("#panel").removeClass();
+    $("#panel").addClass("action-home");
+});
 
-        $(".panel").removeClass("action-auth");
-        $(".panel").addClass("action-auth");
-    }
-});    
+self.port.on("panelSync", function(){
+    console.log("synchronizing");
+    $("#panel").removeClass();
+    $("#panel").addClass("action-sync");
+});
+
+self.port.on("panelLogin", function(){
+    console.log("login required");
+    $("#panel").removeClass();
+    $("#panel").addClass("action-auth");
+});
 
 $('document').ready(function() {
 
@@ -15,7 +21,7 @@ $('document').ready(function() {
         //do not reload page
         event.preventDefault();
 
-        self.port.emit("sync", {
+        self.port.emit("login", {
             data: $('.js-login').serialize(),
             cred: {
                 user: $('#user').val(),

@@ -13,8 +13,16 @@ panel.on("*", function(e) {
   //console.log("event " + e + " was emitted");
 });
 
-panel.port.on("sync", function(data){
-  auth.logIn(data);
+panel.port.on("login", function(data){
+  panel.port.emit("panelSync", {});
+
+  //check if user login details are already stored
+  auth.login(data).then(success => {
+    console.log(success);
+    panel.port.emit("panel", {});
+  }).catch(failed => {
+    panel.port.emit("panelLogin", {});
+  });
 });
 
 var button = ui.ActionButton({
@@ -25,10 +33,16 @@ var button = ui.ActionButton({
 });
 
 function handleClick(state) {
-    panel.port.emit("onLoad", {
-    	session: undefined,
-    	settings: {},
+    panel.port.emit("panelSync", {});
+
+    //check if user login details are already stored
+    auth.init().then(success => {
+      console.log(success);
+      panel.port.emit("panel", {});
+    }).catch(failed => {
+      panel.port.emit("panelLogin", {});
     });
+
     panel.show({
         position: button,
         height: 400,

@@ -16,7 +16,7 @@ exports.main = function (options, callbacks) {
 		//console.log("Addon synced");
 	}
 	storage.init();
-	auth.init();
+	//auth.init();
 	
 };
 
