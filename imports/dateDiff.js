@@ -1,4 +1,3 @@
-(function() {
 
   function DateDiff(date1, date2) {
     this.days = null;
@@ -35,12 +34,8 @@
     this.seconds = s;
   };
 
-  Date.diff = function(date1, date2) {
+  function diff(date1, date2) {
     return new DateDiff(date1, date2);
   };
 
-  Date.prototype.diff = function(date2) {
-    return new DateDiff(this, date2);
-  };
-
-})();
+  exports.diff = diff;

@@ -1,40 +1,62 @@
 var cred = require("sdk/passwords");
 var request = require("./requests.js");
 var storage = require("./storage.js");
+var date = require("./dateDiff.js");
 
 function init() {
 	return new Promise(function (resolve, reject) {
         //check if user login details are already stored
-		userSync().then(success => {
-			resolve(storage.settings());
-		}).catch(failed => {
-			if(failed === "noCred"){
-				reject("Login Required");
+		checkCredentials().then(result => {
+
+			var settings = storage.get("settings");
+
+			if(settings){
+				var diff = date.diff(new Date().getTime(), settings.updated);
+				if(diff.minutes >= 1){
+					console.log("Sync Now!");
+					var syncData = storage.get("api");
+					userSync(syncData).then(result => {
+						resolve();
+					}).catch(error => {	
+						reject();
+					});
+				}else{
+					resolve();
+				}
+			}else{
+				console.log("First time sync");
+				var syncData = storage.get("api");
+				console.log(syncData);
+				userSync(syncData).then(result => {
+					resolve();
+				}).catch(error => {	
+					reject();
+				});
 			}
+
+
+		}).catch(error => {
+			console.log(error);
+			reject();
 		});
     });
 }
 
-function userSync(){
+function userSync(data){
 	return new Promise(function (resolve, reject) {
-		checkCredentials().then(data => {
-			var url = "http://192.168.178.104:5000/v1/sync?uid=" 
-				+ data.uid + "&session=" + data.session;
+		var url = "http://192.168.178.104:5000/v1/sync?uid=" 
+			+ data.uid + "&session=" + data.session;
 
-		    //Async - wait for user settings from server
-			request.get(url).then(json => {
-				var result = JSON.parse(json);
+	    //Async - wait for user settings from server
+		request.get(url).then(json => {
+			var result = JSON.parse(json);
 
-				storage.sync(result);
+			storage.update("settings", result);
 
-				resolve(true);
-			}).catch(error => {
-				console.log("line 32: " + error);
-				reject(false);
-			});
+			resolve();
 		}).catch(error => {
-			console.log("line 36: " + error);
-			reject("noCred");
+			console.log("line 32: " + error);
+			reject(error);
 		});
 	});
 }
@@ -48,34 +70,20 @@ function userLogin(data){
 			var result = JSON.parse(json);
 
 			//check if user login details are already stored
-			checkCredentials().then(data => {
-
-				storage.sync(result);
-
-				resolve(true);
-
+			checkCredentials().then(result => {
+				
 			}).catch(error => {
-				//setup create params
-				var params = {
-					user: data.cred.user,
-					pass: data.cred.pass,
-					uid: result.uid,
-					session: result.session,
-				}
 				//add credentials
-				addCredentials(params).then(response => {
-					console.log(response);
-
-					storage.sync(result);
-
-					resolve(true);
-
+				addCredentials(data.cred).then(result => {
+					console.log(result);
 				}).catch(error => {
-					console.log("line 76: " + error);
-
-					reject(error);
+					console.log(error);
 				});
 			});
+
+			this.storage.update("api", result);
+
+			resolve(true);
 
 		}).catch(error => {
 			console.log(error);
@@ -120,7 +128,7 @@ function checkCredentials() {
         cred.search({
 		    realm: "Opz Addon",
 		    onComplete: function onComplete(credentials) {
-		    	if(credentials.length >= 0){
+				if(credentials[0]){
 		    		resolve(credentials[0]);
 		    	}else{
 		    		reject("No credentials Found.");

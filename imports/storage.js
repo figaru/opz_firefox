@@ -6,7 +6,7 @@ function init(){
 	/*if(JSON.stringify(db.storage) === '{}'){
 		console.log("Populating Database");
 		//empty storage - populate databse with correct fields
-		db.storage.addon = {
+		db.storage.settings = {
 			user:{
 				name: undefined,
 				email: undefined,
@@ -16,27 +16,51 @@ function init(){
 				privateDays: [],
 				privateHours: [],
 			},
-			updated: new Date().getTime(),
+			updated: 000000,
 		}
 	}*/
 }
 
 function getSettings(){
-	return db.storage.addon.settings;
+	return db.storage.settings;
 }
 
-function updateSettings(params){
-	db.storage.addon = {
-		user:{
-			name: undefined,
-			email: params.user,
-		},
-		settings:{
-			token: params.user.token,
-			privateDays: params.settings.privateDays,
-			privateHours: params.settings.privateHours,
-		},
-		updated: new Date().getTime(),
+function getStorage(key){
+	if(key == "updated"){
+		return db.storage.updated;
+	}else if(key == "api"){
+		return db.storage.api;
+	}else if(key == "settings"){
+		return db.storage.settings;
+	}
+}
+
+
+function updateStorage(key, data){
+	if(key == "updated"){
+		db.storage.updated =  {
+			updated: new Date().getTime(),
+		};
+	}else if(key == "api"){
+		db.storage.api = {
+			uid: data.uid,
+			session: data.session,
+		};
+
+		console.log("User settings sync completed!");
+	}else if(key == "settings"){
+		db.storage.settings = {
+			user:{
+				name: data.user.name,
+				email: data.user.email,
+			},
+			settings:{
+				token: data.user.token,
+				privateDays: data.setting.privateDays,
+				privateHours: data.setting.privateHours,
+			},
+			updated: new Date().getTime(),
+		};
 	}
 
 	console.log("User settings sync completed!");
@@ -58,5 +82,5 @@ function addField(params){
 }
 
 exports.init = init;
-exports.sync = updateSettings;
-exports.settings = getSettings;
+exports.update = updateStorage;
+exports.get = getStorage;

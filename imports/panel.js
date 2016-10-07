@@ -37,7 +37,6 @@ function handleClick(state) {
 
     //check if user login details are already stored
     auth.init().then(success => {
-      console.log(success);
       panel.port.emit("panel", {});
     }).catch(failed => {
       panel.port.emit("panelLogin", {});
