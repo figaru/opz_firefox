@@ -1,6 +1,10 @@
 <html>
 	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"> 
+		<!-- Compiled and minified CSS -->
 		<link href="panel.css" rel="stylesheet">
+		<link href="../loader/loader.css" rel="stylesheet">
+		 
 		<script src="jquery.min.js"></script>
 		<script src="panel.js"></script>
 	</head>
@@ -11,16 +15,29 @@
 	    	</div>
 	    	<div class="sync">
 	    		<div class="loader">
-	    		loading...
+	    			<div class="sk-cube-grid">
+					  <div class="sk-cube sk-cube1"></div>
+					  <div class="sk-cube sk-cube2"></div>
+					  <div class="sk-cube sk-cube3"></div>
+					  <div class="sk-cube sk-cube4"></div>
+					  <div class="sk-cube sk-cube5"></div>
+					  <div class="sk-cube sk-cube6"></div>
+					  <div class="sk-cube sk-cube7"></div>
+					  <div class="sk-cube sk-cube8"></div>
+					  <div class="sk-cube sk-cube9"></div>
+					</div>
 	    		</div>
 	    	</div>
 	    	<div class="login">
-				<form class="js-login">
-					<div>Please log in.</div><br>
-					<label>Username:</label> <input class="input" id="user" type="text" name="user"><br>
-					<label>Password:</label> <input class="input" id="pass" type="password" name="pass"><br>
-					<input type="submit" name="submit" value="Log in">
-				</form>
+	    		<h1>Sign In</h1>
+	    		<h3>Access your Opz account to start time tracking.</h3>
+	    		<div class="form">
+					<form class="js-login">
+						<input type="email" class="input" placeholder="E-mail address" id="user" name="user"><br>
+						<input type="password" class="input" placeholder="Password" id="pass" name="pass"><br>
+						<input type="submit" class="submit" name="submit" value="Sign in">
+					</form>
+				</div>
 			</div>
 		</div>
   	</body>
