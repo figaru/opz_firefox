@@ -7,33 +7,33 @@ function init() {
 	return new Promise(function (resolve, reject) {
         //check if user login details are already stored
 		checkCredentials().then(result => {
+			var syncData = storage.get("api");
 
-			var settings = storage.get("settings");
-
-			if(settings){
-				var diff = date.diff(new Date().getTime(), settings.updated);
-				if(diff.minutes >= 1){
-					console.log("Sync Now!");
-					var syncData = storage.get("api");
+			if(syncData){
+				var settings = storage.get("settings");
+				if(settings){
+					var diff = date.diff(new Date().getTime(), settings.updated);
+					if(diff.minutes >= 5){
+						console.log("Sync Now!");
+						userSync(syncData).then(result => {
+							resolve();
+						}).catch(error => {	
+							reject();
+						});
+					}else{
+						resolve();
+					}
+				}else{
+					console.log("First time sync");
 					userSync(syncData).then(result => {
 						resolve();
 					}).catch(error => {	
 						reject();
 					});
-				}else{
-					resolve();
 				}
 			}else{
-				console.log("First time sync");
-				var syncData = storage.get("api");
-				console.log(syncData);
-				userSync(syncData).then(result => {
-					resolve();
-				}).catch(error => {	
-					reject();
-				});
+				reject();
 			}
-
 
 		}).catch(error => {
 			console.log(error);
@@ -70,20 +70,27 @@ function userLogin(data){
 			var result = JSON.parse(json);
 
 			//check if user login details are already stored
-			checkCredentials().then(result => {
-				
+			validateServerResult(result).then(result => {
+				//check if user login details are already stored
+				checkCredentials().then(check => {
+		
+				}).catch(error => {
+					//add credentials
+					addCredentials(data.cred).then(result => {
+
+					}).catch(error => {
+						reject();
+					});
+				});
+
+				this.storage.update("api", result);
+
+				resolve(true);
+
 			}).catch(error => {
 				//add credentials
-				addCredentials(data.cred).then(result => {
-					console.log(result);
-				}).catch(error => {
-					console.log(error);
-				});
+				reject(error);
 			});
-
-			this.storage.update("api", result);
-
-			resolve(true);
 
 		}).catch(error => {
 			console.log(error);
@@ -91,6 +98,19 @@ function userLogin(data){
 			reject(error);
 		});
 	});
+}
+
+function validateServerResult(result){
+	return new Promise(function (resolve, reject) {
+		//check if "success = true" and "error = false"
+		if(!result.error){
+			resolve(result);
+		}
+		//check if "error = true" and "success = false"
+		else if(result.error && !result.success){
+        	reject(result.error_msg);
+        }
+    });
 }
 
 function addCredentials(params) {
@@ -128,8 +148,11 @@ function checkCredentials() {
         cred.search({
 		    realm: "Opz Addon",
 		    onComplete: function onComplete(credentials) {
-				if(credentials[0]){
-		    		resolve(credentials[0]);
+		    	if(credentials[0].username){
+		    		if(credentials[0].password){
+			    		resolve(credentials[0].username);
+			    	}
+			    	reject(credentials[0].username);
 		    	}else{
 		    		reject("No credentials Found.");
 		    	}

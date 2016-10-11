@@ -1,30 +1,34 @@
 self.port.on("panel", function(params){
-    console.log("Welcome!");
     $("#panel").removeClass();
-    $("#panel").addClass("action-home");
+    $("#panel").addClass("action-main");
 });
 
 self.port.on("panelSync", function(){
     $("#panel").removeClass();
-    $("#panel").addClass("action-sync");
+    $("#panel").addClass("action-loading");
 });
 
-self.port.on("panelLogin", function(){
+self.port.on("panelLogin", function(callback){
+    $("#login-message").removeClass();
     $("#panel").removeClass();
-    $("#panel").addClass("action-auth");
+    $("#panel").addClass("action-login");
+
+    if(callback.error){
+        $("#login-message").text(callback.msg).addClass("error");
+    }
 });
 
 $('document').ready(function() {
 
-    $(".js-login").submit(function( event ) {
+    $("#login-form").submit(function( event ) {
         //do not reload page
         event.preventDefault();
 
         self.port.emit("login", {
-            data: $('.js-login').serialize(),
+            data: $('#login-form').serialize(),
             cred: {
-                user: $('#user').val(),
-                pass: $('#pass').val(),
+                user: $('#form-user').val(),
+                pass: $('#form-pass').val(),
             }
         });
 

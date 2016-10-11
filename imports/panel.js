@@ -21,7 +21,7 @@ panel.port.on("login", function(data){
     console.log(success);
     panel.port.emit("panel", {});
   }).catch(failed => {
-    panel.port.emit("panelLogin", {});
+    panel.port.emit("panelLogin", {error: true, msg: failed});
   });
 });
 
@@ -44,8 +44,8 @@ function handleClick(state) {
 
     panel.show({
         position: button,
-        height: 400,
-        width: 350,
+        height: 500,
+        width: 400,
         padding: 0,
     });
 
