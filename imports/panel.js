@@ -42,6 +42,7 @@ function handleClick(state) {
       panel.port.emit("panelLogin", {});
     });
 
+
     panel.show({
         position: button,
         height: 500,
