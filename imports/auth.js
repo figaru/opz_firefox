@@ -42,6 +42,10 @@ function init() {
     });
 }
 
+function userCheck(){
+	
+}
+
 function userSync(data){
 	return new Promise(function (resolve, reject) {
 		var url = "http://192.168.178.104:5000/v1/sync?uid=" 
@@ -52,8 +56,6 @@ function userSync(data){
 			var result = JSON.parse(json);
 
 			storage.update("settings", result);
-
-			resolve();
 		}).catch(error => {
 			console.log("line 32: " + error);
 			reject(error);

@@ -2,6 +2,7 @@ var self = require("sdk/self");
 var panels = require("sdk/panel");
 var ui = require("sdk/ui");
 var auth = require("./auth.js");
+var track = require("./track.js");
 
 var panel = panels.Panel({
   contentURL: self.data.url("panel/panel.html"),
@@ -18,7 +19,6 @@ panel.port.on("login", function(data){
 
   //check if user login details are already stored
   auth.login(data).then(success => {
-    console.log(success);
     panel.port.emit("panel", {});
   }).catch(failed => {
     panel.port.emit("panelLogin", {error: true, msg: failed});

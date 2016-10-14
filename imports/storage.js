@@ -30,6 +30,8 @@ function getStorage(key){
 		return db.storage.updated;
 	}else if(key == "api"){
 		return db.storage.api;
+	}else if(key == "token"){
+		return db.storage.settings.token;
 	}else if(key == "settings"){
 		return db.storage.settings;
 	}
@@ -49,13 +51,13 @@ function updateStorage(key, data){
 
 		console.log("User settings sync completed!");
 	}else if(key == "settings"){
-		db.storage.settings = {
+		db.storage = {
 			user:{
 				name: data.user.name,
 				email: data.user.email,
 			},
 			settings:{
-				token: data.user.token,
+				token: data.setting.token,
 				privateDays: data.setting.privateDays,
 				privateHours: data.setting.privateHours,
 			},
