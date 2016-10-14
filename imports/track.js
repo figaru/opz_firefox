@@ -1,4 +1,4 @@
-
+var auth = require("./auth.js");
 
 function track(){
 	auth.init().then(result => {
@@ -9,4 +9,4 @@ function track(){
 }
 
 
-exports.track = track;
+exports.init = track;

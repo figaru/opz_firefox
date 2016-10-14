@@ -14,7 +14,6 @@ function init() {
 				if(settings){
 					var diff = date.diff(new Date().getTime(), settings.updated);
 					if(diff.minutes >= 5){
-						console.log("Sync Now!");
 						userSync(syncData).then(result => {
 							resolve();
 						}).catch(error => {	
@@ -24,7 +23,6 @@ function init() {
 						resolve();
 					}
 				}else{
-					console.log("First time sync");
 					userSync(syncData).then(result => {
 						resolve();
 					}).catch(error => {	
@@ -42,10 +40,6 @@ function init() {
     });
 }
 
-function userCheck(){
-	
-}
-
 function userSync(data){
 	return new Promise(function (resolve, reject) {
 		var url = "http://192.168.178.104:5000/v1/sync?uid=" 
@@ -56,8 +50,9 @@ function userSync(data){
 			var result = JSON.parse(json);
 
 			storage.update("settings", result);
+
+			resolve();
 		}).catch(error => {
-			console.log("line 32: " + error);
 			reject(error);
 		});
 	});

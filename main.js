@@ -12,7 +12,7 @@ var	track = require("./imports/track.js");
 // to see how to test this function, look at test/test-index.js
 
 exports.main = function (options, callbacks) {
-
+	track.init();
 };
 
 
