@@ -62,6 +62,11 @@ function tabClose(tab) {
 function trigger(tab){
 
 	var domain = tab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1];
+
+    if(domain == "blank"){
+        return;
+    }
+    
     var data = {
     	"title": tab.title,
     	"domain": domain,

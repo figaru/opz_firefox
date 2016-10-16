@@ -7,7 +7,9 @@ const state = {
 	endpoint: "http://opz.io/v1/logs",
 }
 
-
+function init(){
+	
+}
 
 function setStatus(bool){
 	state.status = bool;
