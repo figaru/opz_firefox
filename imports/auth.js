@@ -14,7 +14,6 @@ function init() {
 				if(settings){
 					var diff = date.diff(new Date().getTime(), settings.updated);
 					if(diff.minutes >= 5){
-						console.log("Sync Now!");
 						userSync(syncData).then(result => {
 							resolve();
 						}).catch(error => {	
@@ -24,7 +23,6 @@ function init() {
 						resolve();
 					}
 				}else{
-					console.log("First time sync");
 					userSync(syncData).then(result => {
 						resolve();
 					}).catch(error => {	
@@ -55,7 +53,6 @@ function userSync(data){
 
 			resolve();
 		}).catch(error => {
-			console.log("line 32: " + error);
 			reject(error);
 		});
 	});
