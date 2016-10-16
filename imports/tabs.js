@@ -1,5 +1,6 @@
 var tabs = require("sdk/tabs");
 var storage = require("./storage.js");
+var track = require("./track.js");
 
 
 
@@ -10,6 +11,13 @@ function init(){
   			tabOpen(tab);
 	}
     tabs.on('open', tabOpen);
+}
+
+function destroy(){
+    if(tabs){
+        for (let tab of tabs)
+            tab.destroy();
+    }
 }
 
 function tabOpen(tab){
@@ -54,16 +62,14 @@ function tabClose(tab) {
 function trigger(tab){
 
 	var domain = tab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1];
-    var beat = {
-    	"token": storage.get("token"),
+    var data = {
     	"title": tab.title,
     	"domain": domain,
     	"url": tab.url,
-    	"timestamp": Math.floor((new Date).getTime()/1000),
+    	"time": Math.floor((new Date).getTime()/1000),
     }
 
-    console.log(beat);
-
+    track.beat(data);
 }
 
 

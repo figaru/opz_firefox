@@ -1,4 +1,4 @@
-var db = require("sdk/simple-storage");
+const db = require("sdk/simple-storage");
 
 
 //populate storage with correct fields check synced

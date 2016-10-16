@@ -1,6 +1,10 @@
 self.port.on("panel", function(params){
     $("#panel").removeClass();
     $("#panel").addClass("action-main");
+
+    if(params.status){
+        $("#status").prop('checked', true);
+    }
 });
 
 self.port.on("panelSync", function(){
@@ -33,6 +37,15 @@ $('document').ready(function() {
         });
 
         return false;
+    });
+
+    $('#status').on('change', function(){ // on change of state
+        if(this.checked) // if changed state is "CHECKED"
+        {
+            self.port.emit("status", true);
+        }else{
+            self.port.emit("status", false);
+        }
     });
 
 });
