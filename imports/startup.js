@@ -1,6 +1,5 @@
 function startup(reason){
 
-	
 	return reason;
 }
 
