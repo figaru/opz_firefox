@@ -2,6 +2,7 @@ const auth = require("./auth.js");
 const tabs = require("./tabs.js");
 const state = require("./state.js");
 const request = require("./requests.js");
+const pref = require("./prefs.js");
 
 function init(){
 	auth.init().then(result => {
@@ -16,19 +17,19 @@ function beat(data){
 	    //Async - sending heartbeat to server
 
 	    let beat = {
-	    	token: state.token(),
+	    	token: pref.get("user_token"),
 	    	data: data,
 	    };
 
 	    console.log(beat);
 
-		request.post(beat, state.endpoint()).then(json => {
+		request.post(beat, pref.get("endpoint_beat")).then(json => {
 			console.log("beat sent");
 		}).catch(error => {
 			console.log(error);
 		});
 	}else{
-		console.log("Running: " + state.status);
+		console.log("Running: " + state.status());
 	}
 }
 

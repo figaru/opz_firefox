@@ -10,7 +10,6 @@ function init(){
 		for (let tab of tabs)
   			tabOpen(tab);
 	}
-    tabs.on('open', tabOpen);
 }
 
 function destroy(){
@@ -19,6 +18,8 @@ function destroy(){
             tab.destroy();
     }
 }
+
+tabs.on('open', tabOpen);
 
 function tabOpen(tab){
     tab.on("pageshow", tabShow);
@@ -31,7 +32,8 @@ function tabOpen(tab){
 function tabShow(tab) {
 	//attach script file to monitor triggers
 	var worker = tab.attach({
-    	contentScriptFile:[ "./../imports/jquery.min.js", "./../imports/inject.js"]
+    	contentScriptFile:[ "./../imports/jquery.min.js", "./../imports/inject.js"],
+        contentScriptWhen: "end",
     });
 
     //run function if event scroll or click recived

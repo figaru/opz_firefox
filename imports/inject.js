@@ -1,7 +1,9 @@
 
-$(document).on('keyup keypress click scroll change', throttle(function (event) {
+$(this).on('keyup keypress click scroll change', throttle(function (event) {
+  console.log(event.type);
   self.port.emit("trigger", event.type);
 }, 4000));
+
 
 function throttle(fn, threshhold, scope) {
   threshhold || (threshhold = 250);

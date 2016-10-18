@@ -9,11 +9,14 @@ var tabs = require("./imports/tabs.js");*/
 
 const panel = require("./imports/panel.js");
 const track = require("./imports/track.js"); 
+const pref = require("./imports/prefs.js"); 
 
 // a dummy function, to show how tests work.
 // to see how to test this function, look at test/test-index.js
 
 exports.main = function (options, callbacks) {
+
+	console.log(pref.get("endpoint_auth"));
 };
 
 
