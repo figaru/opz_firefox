@@ -1,5 +1,5 @@
 
-$(this).on('keyup keypress click scroll change', throttle(function (event) {
+$(document).on('keyup keypress click scroll change', throttle(function (event) {
   console.log(event.type);
   self.port.emit("trigger", event.type);
 }, 4000));

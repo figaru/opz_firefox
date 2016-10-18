@@ -65,7 +65,8 @@ function trigger(tab){
 
 	var domain = tab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1];
 
-    if(domain == "blank"){
+    if(domain == "blank" || domain == "newtab"){
+        console.log(domain);
         return;
     }
     
