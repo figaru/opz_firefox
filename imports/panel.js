@@ -3,7 +3,7 @@ var panels = require("sdk/panel");
 const ui = require("sdk/ui");
 var auth = require("./auth.js");
 var track = require("./track.js");
-const state = require("./state.js");
+const pref = require("./prefs.js");
 
 var panel = panels.Panel({
   contentURL: self.data.url("panel/panel.html"),
@@ -12,7 +12,7 @@ var panel = panels.Panel({
 });
 
 panel.port.on("status", function(bool){
-  state.setStatus(bool);
+  pref.set("app_running", bool);
 });
 
 panel.port.on("login", function(data){
@@ -20,7 +20,7 @@ panel.port.on("login", function(data){
 
   //check if user login details are already stored
   auth.login(data).then(success => {
-    panel.port.emit("panel", {status: state.status});
+    panel.port.emit("panel", {status: pref.get("app_running")});
   }).catch(failed => {
     panel.port.emit("panelLogin", {error: true, msg: failed});
   });
@@ -38,7 +38,7 @@ function handleClick(state) {
 
     //check if user login details are already stored
     auth.init().then(success => {
-      panel.port.emit("panel", {status: state.status});
+      panel.port.emit("panel", {status: pref.get("app_running")});
     }).catch(failed => {
       panel.port.emit("panelLogin", {});
     });

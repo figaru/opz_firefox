@@ -41,5 +41,13 @@
       "description": "The token is used to match the heartbeats with you account. eg. 6sbb1721-n31i-j3h1j-kn31kj-dajndajknjk1n",
       "type": "string",
       "value": "f6bd64fd-af5e-d965-9da3-0bc9684b85f1"
+  },
+  {
+      "name": "app_running",
+      "title": "Tracker Running",
+      "description": "Is the app running?",
+      "type": "bool",
+      "value": true,
+      "hidden": true
   }]
 }

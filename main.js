@@ -15,13 +15,12 @@ const pref = require("./imports/prefs.js");
 // to see how to test this function, look at test/test-index.js
 
 exports.main = function (options, callbacks) {
-
-	console.log(pref.get("endpoint_auth"));
+	track.start();
 };
 
 
 exports.onUnload = function (reason) {
-	console.log(reason);
+	//console.log(reason);
 };
 
 

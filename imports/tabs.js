@@ -2,24 +2,32 @@ var tabs = require("sdk/tabs");
 var storage = require("./storage.js");
 var track = require("./track.js");
 
-
+var workers = [];
 
 function init(){
 	//if tab open - run function OnOpen
+    console.log("init tabs");
 	if(tabs){
 		for (let tab of tabs)
-  			tabOpen(tab);
+  			tabInitialize(tab);
 	}
+
+    tabs.on('open', tabOpen);
 }
 
 function destroy(){
-    if(tabs){
-        for (let tab of tabs)
-            tab.destroy();
+    console.log("destroying tab workers");
+    if(workers){
+        for (let worker of workers)
+            //remove all content scripts
+            worker.destroy();
     }
 }
 
-tabs.on('open', tabOpen);
+function tabInitialize(tab){
+    tabOpen(tab);
+    tabShow(tab);
+}
 
 function tabOpen(tab){
     tab.on("pageshow", tabShow);
@@ -30,11 +38,14 @@ function tabOpen(tab){
 
 
 function tabShow(tab) {
+    trigger(tab);
 	//attach script file to monitor triggers
 	var worker = tab.attach({
     	contentScriptFile:[ "./../imports/jquery.min.js", "./../imports/inject.js"],
         contentScriptWhen: "end",
     });
+
+    workers.push(worker);
 
     //run function if event scroll or click recived
     worker.port.on("trigger", function (text) {
@@ -66,7 +77,6 @@ function trigger(tab){
 	var domain = tab.url.match(/^[\w-]+:\/*\[?([\w\.:-]+)\]?(?::\d+)?/)[1];
 
     if(domain == "blank" || domain == "newtab"){
-        console.log(domain);
         return;
     }
     
@@ -82,3 +92,4 @@ function trigger(tab){
 
 
 exports.init = init;
+exports.destroy = destroy;
