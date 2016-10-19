@@ -1,0 +1,126 @@
+body, html{
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto', sans-serif !important;
+	text-rendering: optimizeLegibility !important;
+	font-weight: 400;
+	font-size: 14px;
+	background-color: #f9f9f9;
+}
+
+.wrapper {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;  
+  
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+}
+
+.header {
+	height: 65px;
+	background-color: #30304A;
+  	flex: 1 100%;
+  	flex-direction: row;
+  	position: relative;
+}.header .logo{
+	position: absolute;
+	height: 100%;
+	padding: 0px 20px;
+	background-color: #1AB5FA;
+	display: table;
+	}.logo span{
+		position: relative;
+		color: #fff;
+		font-size: 2em;
+		font-weight: 200;
+		text-align: center;
+		display: table-cell;
+		vertical-align: middle;
+	}
+.header .nav{
+
+}
+.main {
+	padding: 40px;
+	padding-right: 50px;
+  	flex: 1 100%;
+}.main .page{
+	width: 100%;
+	min-height: 400px;
+	background-color: #fff;
+	padding: 30px 40px;
+	box-sizing: border-box;
+	box-shadow: 0 1px 8px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.06);
+}.page h1{
+	font-size: 2em;
+	font-weight: 200;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar{
+	width: 250px;
+}.sidebar ul{
+	list-style-type: none;
+    margin: 40px 10px;
+    padding: 0;
+    }.sidebar li a {
+	    display: block;
+	    width: 100%;
+	    padding: 12px 15px;
+	    margin: 5px 0px;
+	   	color: #c5c5c5;
+	    display: table;
+	    box-sizing: border-box;
+	    align-content: middle;
+	    cursor: pointer;
+		}.sidebar li a svg{
+			display: table-cell;
+			vertical-align: middle;
+			height: 17px;
+			width: 17px;
+			padding-right: 15px;
+			float: left;
+			fill: #1AB5FA;
+		}.sidebar li a .label{
+			display: table-cell;
+			vertical-align: middle;
+			float: left;
+			font-size: .85em;
+			text-transform: uppercase;
+		}
+	.sidebar li.active > a {
+		background-color: #f1f1f1;
+		color: #434662;
+	}.sidebar li a:hover {
+		background-color: #f1f1f1;
+		color: #434662;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media all and (min-width: 600px) {
+
+}
+
+@media all and (min-width: 800px) {
+
+	.main    	{ flex: 1 auto; }
+	.sidebar 	{ order: 1; } 
+	.main    	{ order: 2; }
+	.footer  	{ order: 3; }
+}

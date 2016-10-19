@@ -1,4 +1,5 @@
 const track = require("./track.js");
+const pref = require("./prefs.js");
 
 const state = {
 	session: undefined,

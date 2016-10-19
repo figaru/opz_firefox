@@ -2,6 +2,7 @@ var cred = require("sdk/passwords");
 var request = require("./requests.js");
 var storage = require("./storage.js");
 var date = require("./dateDiff.js");
+const pref = require("./prefs.js");
 
 function init() {
 	return new Promise(function (resolve, reject) {
@@ -42,7 +43,7 @@ function init() {
 
 function userSync(data){
 	return new Promise(function (resolve, reject) {
-		var url = "http://192.168.178.104:5000/v1/sync?uid=" 
+		var url = pref.get("endpoint_sync") + "?uid=" 
 			+ data.uid + "&session=" + data.session;
 
 	    //Async - wait for user settings from server
@@ -60,7 +61,9 @@ function userSync(data){
 
 function userLogin(data){
 	return new Promise(function (resolve, reject) {
-		var url = "http://192.168.178.104:5000/v1/auth?" + data.data;
+		var url = pref.get("endpoint_auth") + "?" + data.data;
+
+		console.log(url);
 
 	    //Async - wait for user settings from server
 		request.get(url).then(json => {

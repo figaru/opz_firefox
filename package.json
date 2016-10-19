@@ -12,5 +12,42 @@
   "license": "MIT",
   "keywords": [
     "jetpack"
-  ]
+  ],
+  "fullName": "Example Add-on",
+  "preferences": [{
+      "name": "endpoint_auth",
+      "title": "Authentication",
+      "description": "Server endpoint used for authenticating user login credentials. eg. https://domain.com/v1/auth",
+      "type": "string",
+      "value": "http://192.168.178.104:5000/v1/auth"
+  },
+  {
+      "name": "endpoint_sync",
+      "title": "Synchronization",
+      "description": "Server endpoint used for synchronizing user settings. eg. https://domain.com/v1/sync",
+      "type": "string",
+      "value": "http://192.168.178.104:5000/v1/sync"
+  },
+  {
+      "name": "endpoint_beat",
+      "title": "HeartBeat",
+      "description": "Server endpoint used for sending addon time beats. eg. https://domain.com/v1/logs",
+      "type": "string",
+      "value": "http://opz.io/v1/logs"
+  },
+  {
+      "name": "user_token",
+      "title": "Token",
+      "description": "The token is used to match the heartbeats with you account. eg. 6sbb1721-n31i-j3h1j-kn31kj-dajndajknjk1n",
+      "type": "string",
+      "value": "f6bd64fd-af5e-d965-9da3-0bc9684b85f1"
+  },
+  {
+      "name": "app_running",
+      "title": "Tracker Running",
+      "description": "Is the app running?",
+      "type": "bool",
+      "value": true,
+      "hidden": true
+  }]
 }
