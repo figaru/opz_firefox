@@ -49,10 +49,11 @@ $('document').ready(function() {
 
         if(this.checked) // if changed state is "CHECKED"
         {
-            if(validate.private());
+            if(validatePrivate()){
                 self.port.emit("status", true);
-
-            $("#status").prop('checked', false);
+            }else{
+                $("#status").prop('checked', false);
+            }   
         }else{
             self.port.emit("status", false);
         }
