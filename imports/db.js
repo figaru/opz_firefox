@@ -2,7 +2,7 @@ const db = require("sdk/simple-storage");
 const pref = require("./prefs.js");
 
 function init(){
-	if(db.storage == {}){
+	if(db.storage){
 		console.log("populating database");
 		db.storage = {
 			sync:{
