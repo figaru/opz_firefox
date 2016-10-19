@@ -1,9 +1,15 @@
+let appParams = {};
+
 self.port.on("panel", function(params){
     $("#panel").removeClass();
     $("#panel").addClass("action-main");
 
-    if(params.status){
-        $("#status").prop('checked', true);
+    appParams = params;
+    
+    if(params){
+        $("#status").prop('checked', params.status);
+        $("#title-user").html(params.user.name);
+        $("#title-email").html(params.user.email);
     }
 });
 
@@ -40,12 +46,38 @@ $('document').ready(function() {
     });
 
     $('#status').on('change', function(){ // on change of state
+
         if(this.checked) // if changed state is "CHECKED"
         {
-            self.port.emit("status", true);
+            if(validate.private());
+                self.port.emit("status", true);
+
+            $("#status").prop('checked', false);
         }else{
             self.port.emit("status", false);
         }
     });
 
 });
+
+function validatePrivate(){
+    var today = new Date().getDay();
+    var now = new Date().getHours();
+
+    var settings = appParams.user;
+
+    for(let day of settings.privateDays){
+        if(today == day){
+            return false;
+        }
+    }
+
+    for(let hour of settings.privateHours){
+        if(now == hour){
+            return false;
+        }
+    }
+
+
+    return true;
+}

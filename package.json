@@ -1,6 +1,7 @@
 {
   "title": "Opz Firefox",
   "name": "opzfirefox",
+  "icon": "resource://@opzfirefox/data/img/icon_b.png",
   "version": "0.0.1",
   "description": "Opz firefox addon",
   "main": "main.js",
@@ -41,6 +42,22 @@
       "description": "The token is used to match the heartbeats with you account. eg. 6sbb1721-n31i-j3h1j-kn31kj-dajndajknjk1n",
       "type": "string",
       "value": "f6bd64fd-af5e-d965-9da3-0bc9684b85f1"
+  },
+  {
+      "name": "user_name",
+      "title": "name",
+      "description": "The name of user eg. john test",
+      "type": "string",
+      "value": "Testing",
+      "hidden": true
+  },
+  {
+      "name": "user_email",
+      "title": "email",
+      "description": "The email of user. eg.test@test.com ",
+      "type": "string",
+      "value": "test@test.com",
+      "hidden": true
   },
   {
       "name": "app_running",
