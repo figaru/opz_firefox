@@ -2,7 +2,7 @@
   "title": "Opz Firefox",
   "name": "opzfirefox",
   "icon": "resource://@opzfirefox/data/img/icon_b.png",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Opz firefox addon",
   "main": "main.js",
   "author": "Daniel Abrantes",
@@ -64,7 +64,7 @@
       "title": "Tracker Running",
       "description": "Is the app running?",
       "type": "bool",
-      "value": true,
+      "value": false,
       "hidden": true
   }]
 }
