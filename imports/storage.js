@@ -1,24 +1,9 @@
 const db = require("sdk/simple-storage");
+const pref = require("./prefs.js");
 
 
 //populate storage with correct fields check synced
 function init(){
-	/*if(JSON.stringify(db.storage) === '{}'){
-		console.log("Populating Database");
-		//empty storage - populate databse with correct fields
-		db.storage.settings = {
-			user:{
-				name: undefined,
-				email: undefined,
-			},
-			settings:{
-				token: undefined,
-				privateDays: [],
-				privateHours: [],
-			},
-			updated: 000000,
-		}
-	}*/
 }
 
 function getSettings(){
@@ -30,8 +15,6 @@ function getStorage(key){
 		return db.storage.updated;
 	}else if(key == "api"){
 		return db.storage.api;
-	}else if(key == "token"){
-		return db.storage.settings.settings.token;
 	}else if(key == "settings"){
 		return db.storage.settings;
 	}
@@ -51,19 +34,19 @@ function updateStorage(key, data){
 
 		console.log("User settings sync completed!");
 	}else if(key == "settings"){
+		pref.set("user_token", data.setting.token);
+		pref.set("user_name", data.user.name);
+		pref.set("user_email", data.user.email);
+
 		db.storage.settings = {
-			user:{
-				name: data.user.name,
-				email: data.user.email,
-			},
-			settings:{
-				token: data.setting.token,
 				privateDays: data.setting.privateDays,
 				privateHours: data.setting.privateHours,
-			},
-			updated: new Date().getTime(),
-		};
+			};
+
+
 	}
+
+	db.storage.updated = new Date().getTime();
 }
 
 //return bool of field(s) if not empty

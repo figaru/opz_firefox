@@ -1,30 +1,42 @@
-var cred = require("sdk/passwords");
-var request = require("./requests.js");
-var storage = require("./storage.js");
-var date = require("./dateDiff.js");
+const cred = require("sdk/passwords");
+const request = require("./requests.js");
+const date = require("./dateDiff.js");
 const pref = require("./prefs.js");
+const db = require("./db.js");
+const validate = require("./validate.js");
 
 function init() {
 	return new Promise(function (resolve, reject) {
         //check if user login details are already stored
 		checkCredentials().then(result => {
-			var syncData = storage.get("api");
+			//retrieve session and uid
+			let syncData = db.getSync();
 
-			if(syncData){
-				var settings = storage.get("settings");
-				if(settings){
-					var diff = date.diff(new Date().getTime(), settings.updated);
-					if(diff.minutes >= 5){
-						userSync(syncData).then(result => {
+			//check if sync data available
+			if(!validate.hasNull(syncData)){
+				let userData = db.getUser();
+
+				if(!validate.hasNull(userData)){
+					
+					//retrieve app data - containign updated timestamp
+					var app = db.getApp();
+
+					//check if app data available
+					if(app){
+						var diff = date.diff(new Date().getTime(), app.updated);
+						if(diff.minutes >= 5){
+							userSync(syncData).then(result => {
+								resolve();
+							}).catch(error => {	
+								reject();
+							});
+						}else{
 							resolve();
-						}).catch(error => {	
-							reject();
-						});
-					}else{
-						resolve();
+						}
 					}
+
 				}else{
-					userSync(syncData).then(result => {
+					userSync(syncData).then(callback => {
 						resolve();
 					}).catch(error => {	
 						reject();
@@ -50,7 +62,7 @@ function userSync(data){
 		request.get(url).then(json => {
 			var result = JSON.parse(json);
 
-			storage.update("settings", result);
+			db.storeUser(result.data);
 
 			resolve();
 		}).catch(error => {
@@ -71,19 +83,16 @@ function userLogin(data){
 
 			//check if user login details are already stored
 			validateServerResult(result).then(result => {
-				//check if user login details are already stored
-				checkCredentials().then(check => {
-		
-				}).catch(error => {
-					//add credentials
-					addCredentials(data.cred).then(result => {
+				
+				//add credentials
+				updateCredentials(data.cred).then(result => {
 
-					}).catch(error => {
-						reject();
-					});
+				}).catch(error => {
+					reject();
 				});
 
-				this.storage.update("api", result);
+				//store api session and uid
+				db.storeSync(result);
 
 				resolve(true);
 
@@ -129,12 +138,22 @@ function addCredentials(params) {
     });
 }
 
-function removeCredentials() {
+function updateCredentials() {
 	return new Promise(function (resolve, reject) {
         cred.remove({
 		  realm: "Opz Addon",
 		  onComplete: function onComplete() {
-		    resolve("Credentials successfuly removed!");
+		    cred.store({
+			  realm: "Opz Addon",
+			  username: params.user,
+			  password: params.pass,
+			  onComplete: function onComplete() {
+			    resolve("Credentials Added Successfuly!");
+			  },
+			  onError: function onError(err){
+			  	reject(err);
+			  }
+			});	
 		  },
 		  onError: function onError(err){
 		  	reject("Failed to remove credentials.");
