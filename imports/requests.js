@@ -1,11 +1,17 @@
 const {XMLHttpRequest} = require("sdk/net/xhr");
 
-function getRequest(url) {
+
+function syncRequest(data){
+    console.log(data);
     // Promises require two functions: one for success, one for failure
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
 
-        xhr.open('GET', url);
+        xhr.open('GET', data.url);
+
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.setRequestHeader("X-User-Id", data.cred.uid);
+        xhr.setRequestHeader("X-Auth-Token", data.cred.session);
 
         xhr.onload = () => {
             if (xhr.status === 200) {
@@ -27,14 +33,13 @@ function getRequest(url) {
     });
 }
 
-function postRequest(beat, url){
+function loginRequest(data){
     // Promises require two functions: one for success, one for failure
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
+        data.cred = JSON.stringify(data.cred);
 
-        let data = JSON.stringify(beat);
-
-        xhr.open('POST', url, true);
+        xhr.open('POST', data.url, true);
         xhr.setRequestHeader("Content-type", "application/json");
 
         xhr.onload = () => {
@@ -53,9 +58,9 @@ function postRequest(beat, url){
             reject("Unable to load RSS");
         };
 
-        xhr.send(data);
+        xhr.send(data.cred);
     });
 }
 
-exports.get = getRequest;
-exports.post = postRequest;
+exports.login = loginRequest;
+exports.sync = syncRequest;

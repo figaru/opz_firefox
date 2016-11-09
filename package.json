@@ -2,7 +2,7 @@
   "title": "Opz Firefox",
   "name": "opzfirefox",
   "icon": "resource://@opzfirefox/data/img/icon_b.png",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Opz firefox addon",
   "main": "main.js",
   "author": "Daniel Abrantes",
@@ -18,23 +18,23 @@
   "preferences": [{
       "name": "endpoint_auth",
       "title": "Authentication",
-      "description": "Server endpoint used for authenticating user login credentials. eg. https://domain.com/v1/auth",
+      "description": "Server endpoint used for authenticating user login credentials. eg. https://domain.com/v1/login",
       "type": "string",
-      "value": "http://192.168.178.104:5000/v1/auth"
+      "value": "http://localhost:5000/api/v1/login"
   },
   {
       "name": "endpoint_sync",
       "title": "Synchronization",
       "description": "Server endpoint used for synchronizing user settings. eg. https://domain.com/v1/sync",
       "type": "string",
-      "value": "http://192.168.178.104:5000/v1/sync"
+      "value": "http://localhost:5000/api/v1/sync"
   },
   {
       "name": "endpoint_beat",
       "title": "HeartBeat",
       "description": "Server endpoint used for sending addon time beats. eg. https://domain.com/v1/logs",
       "type": "string",
-      "value": "http://opz.io/v1/logs"
+      "value": "http://api.opz.io/v1/logs"
   },
   {
       "name": "user_token",

@@ -31,9 +31,10 @@ function init(){
 }
 
 function storeSync(data){
+	console.log(data);
 	db.storage.sync = {
-		session: data.session,
-		uid: data.uid,
+		session: data.authToken,
+		uid: data.userId,
 	};
 }
 

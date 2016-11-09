@@ -35,10 +35,10 @@ $('document').ready(function() {
         event.preventDefault();
 
         self.port.emit("login", {
-            data: $('#login-form').serialize(),
+            url: "",
             cred: {
-                user: $('#form-user').val(),
-                pass: $('#form-pass').val(),
+                username: $('#form-user').val(),
+                password: $('#form-pass').val(),
             }
         });
 

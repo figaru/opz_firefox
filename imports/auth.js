@@ -12,6 +12,8 @@ function init() {
 			//retrieve session and uid
 			let syncData = db.getSync();
 
+			console.log(syncData);
+
 			//check if sync data available
 			if(!validate.hasNull(syncData)){
 				let userData = db.getUser();
@@ -55,11 +57,11 @@ function init() {
 
 function userSync(data){
 	return new Promise(function (resolve, reject) {
-		var url = pref.get("endpoint_sync") + "?uid=" 
-			+ data.uid + "&session=" + data.session;
+		data.cred = data;
+		data.url = pref.get("endpoint_sync");
 
 	    //Async - wait for user settings from server
-		request.get(url).then(json => {
+		request.sync(data).then(json => {
 			var result = JSON.parse(json);
 
 			db.storeUser(result.data);
@@ -73,33 +75,33 @@ function userSync(data){
 
 function userLogin(data){
 	return new Promise(function (resolve, reject) {
-		var url = pref.get("endpoint_auth") + "?" + data.data;
-
-		console.log(url);
+		data.url = pref.get("endpoint_auth");
 
 	    //Async - wait for user settings from server
-		request.get(url).then(json => {
+		request.login(data).then(json => {
 			var result = JSON.parse(json);
 
 			//check if user login details are already stored
-			validateServerResult(result).then(result => {
-				
-				//add credentials
-				updateCredentials(data.cred).then(result => {
+			if(validateServerResult(result)){
+				let credential = JSON.parse(data.cred);
 
-				}).catch(error => {
-					reject();
+				//add Credentials
+				cred.store({
+				  realm: "Opz Addon",
+				  username: credential.username,
+				  password: credential.password,
+				  onComplete:function onComplete(data){
+				  	db.storeSync(result.data);
+
+					resolve(true);
+				  },
+				  onError: function onError(error){
+				  	console.log("failed");
+				  }
 				});
-
-				//store api session and uid
-				db.storeSync(result);
-
-				resolve(true);
-
-			}).catch(error => {
-				//add credentials
-				reject(error);
-			});
+			}else{
+				reject();
+			}
 
 		}).catch(error => {
 			console.log(error);
@@ -112,22 +114,22 @@ function userLogin(data){
 function validateServerResult(result){
 	return new Promise(function (resolve, reject) {
 		//check if "success = true" and "error = false"
-		if(!result.error){
-			resolve(result);
-		}
-		//check if "error = true" and "success = false"
-		else if(result.error && !result.success){
-        	reject(result.error_msg);
+		if(result.status == "success"){
+			return true;
+		}else{
+        	return false;
         }
     });
 }
 
-function addCredentials(params) {
+function addCredentials(user, pass) {
 	return new Promise(function (resolve, reject) {
+		console.log(user);
+		console.log(pass);
         cred.store({
 		  realm: "Opz Addon",
-		  username: params.user,
-		  password: params.pass,
+		  username: user,
+		  password: pass,
 		  onComplete: function onComplete() {
 		    resolve("Credentials Added Successfuly!");
 		  },
@@ -138,15 +140,15 @@ function addCredentials(params) {
     });
 }
 
-function updateCredentials() {
+function updateCredentials(params) {
 	return new Promise(function (resolve, reject) {
         cred.remove({
 		  realm: "Opz Addon",
 		  onComplete: function onComplete() {
 		    cred.store({
 			  realm: "Opz Addon",
-			  username: params.user,
-			  password: params.pass,
+			  username: params.username,
+			  password: params.password,
 			  onComplete: function onComplete() {
 			    resolve("Credentials Added Successfuly!");
 			  },
@@ -156,7 +158,17 @@ function updateCredentials() {
 			});	
 		  },
 		  onError: function onError(err){
-		  	reject("Failed to remove credentials.");
+		  	cred.store({
+			  realm: "Opz Addon",
+			  username: params.username,
+			  password: params.password,
+			  onComplete: function onComplete() {
+			    resolve("Credentials Added Successfuly!");
+			  },
+			  onError: function onError(err){
+			  	reject(err);
+			  }
+			});
 		  }
 		});
     });
@@ -190,8 +202,8 @@ function getCredentials() {
 		    onComplete: function onComplete(credentials) {
 		    	credentials.forEach(function(credential) {
 		        	resolve({
-		        		user: credential.username,
-		        		pass: credential.password,
+		        		username: credential.username,
+		        		password: credential.password,
 		        	});
 		        });
 			},
