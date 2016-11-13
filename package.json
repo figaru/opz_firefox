@@ -2,7 +2,7 @@
   "title": "Opz Firefox",
   "name": "opzfirefox",
   "icon": "resource://@opzfirefox/data/img/icon_b.png",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "description": "Opz firefox addon",
   "main": "main.js",
   "author": "Daniel Abrantes",
@@ -41,7 +41,7 @@
       "title": "Token",
       "description": "The token is used to match the heartbeats with you account. eg. 6sbb1721-n31i-j3h1j-kn31kj-dajndajknjk1n",
       "type": "string",
-      "value": "f6bd64fd-af5e-d965-9da3-0bc9684b85f1"
+      "value": "AoJ/IEGz1iGzVaiV4Q=="
   },
   {
       "name": "user_name",

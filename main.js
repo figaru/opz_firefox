@@ -1,4 +1,5 @@
 var self = require("sdk/self");
+const ss = require("sdk/simple-storage");
 /*var base64 = require("./imports/base64");
 var startup = require("./imports/startup.js");
 var storage = require("./imports/storage.js");
@@ -11,15 +12,22 @@ const panel = require("./imports/panel.js");
 const track = require("./imports/track.js"); 
 const pref = require("./imports/prefs.js"); 
 const db = require("./imports/db.js");
+const sys = require("./imports/startup.js");
 
 // a dummy function, to show how tests work.
 // to see how to test this function, look at test/test-index.js
 
 exports.main = function (options, callbacks) {
-	db.init();
+
+
+
+	//db.init();
 	track.start();
 };
 
+exports.onLoad = function(reason){
+	console.log(reason);
+}
 
 exports.onUnload = function (reason) {
 	//console.log(reason);

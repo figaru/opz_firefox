@@ -9,7 +9,7 @@ self.port.on("panel", function(params){
     if(params){
         $("#status").prop('checked', params.status);
         $("#title-user").html(params.user.name);
-        $("#title-email").html(params.user.email);
+        $("#title-company").html(params.user.company);
     }
 });
 
@@ -22,8 +22,9 @@ self.port.on("panelLogin", function(callback){
     $("#login-message").removeClass();
     $("#panel").removeClass();
     $("#panel").addClass("action-login");
-
+    
     if(callback.error){
+        console.log(callback);
         $("#login-message").text(callback.msg).addClass("error");
     }
 });
@@ -34,12 +35,14 @@ $('document').ready(function() {
         //do not reload page
         event.preventDefault();
 
+        let cred = {
+            username: $('#form-user').val(),
+            password: $('#form-pass').val(),
+        }
+
         self.port.emit("login", {
             url: "",
-            cred: {
-                username: $('#form-user').val(),
-                password: $('#form-pass').val(),
-            }
+            cred: cred,
         });
 
         return false;

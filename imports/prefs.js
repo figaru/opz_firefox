@@ -11,8 +11,6 @@ function appStatusChange(key) {
 	}
 }
 
-
-
 function set(key, value){
 	pref[key] = value;
 }

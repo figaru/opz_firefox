@@ -1,59 +1,68 @@
 const db = require("sdk/simple-storage");
 const pref = require("./prefs.js");
 
-function init(){
-	if(db.storage){
-		console.log("populating database");
-		db.storage = {
-			sync:{
-				session: "",
-				uid: "",
-			},
-			user:{
-				name: "",
-				email: "",
-				token: "",
-				privateDays: [],
-				privateHours: [],
-			},
-			api: {
-				end_sync: "",
-				end_auth: "",
-				end_beat: "",
-			},
-			app: {
-				status: false,
-				runtime: null,
-				updated: null,
-			}
-		};
-	}
+/*if(!db.storage.test){
+	console.log("creating test");
+	db.storage.test = "test";
+}else{
+	console.log(db.storage.test);
+}*/
+function myOnOverQuotaListener() {
+  console.log("Uh oh.");
+}
+db.on("OverQuota", myOnOverQuotaListener);
+
+if(!db.storage.addon){
+	console.log("populating database");
+	db.storage.addon = {
+		sync:{
+			session: "",
+			uid: "",
+			username: "",
+		},
+		user:{
+			name: "",
+			company: "",
+			token: "",
+			privateDays: [],
+			privateHours: [],
+		},
+		app: {
+			status: false,
+			runtime: null,
+			updated: null,
+		}
+	};
+}else{
+	console.log(db.storage.addon);
 }
 
 function storeSync(data){
-	console.log(data);
-	db.storage.sync = {
+	db.storage.addon.sync = {
 		session: data.authToken,
 		uid: data.userId,
+		username: data.username,
 	};
 }
 
 function storeUser(data){
-	db.storage.user = {
+	db.storage.addon.user = {
 		name: data.name,
-		email: data.email,
+		company: data.company,
 		token: data.token,
 		privateDays: data.privateDays,
 		privateHours: data.privateHours,
 	};
 
-	db.storage.app.updated = new Date().getTime();
+	pref.set("user_token", data.token);
+
+	db.storage.addon.app.updated = new Date().getTime();
 }
 
 
-function getSync(){ return db.storage.sync; };
-function getUser(){ return db.storage.user; };
-function getApp(){ return db.storage.app; };
+function getSync(){ return db.storage.addon.sync; };
+function getUser(){ return db.storage.addon.user; };
+function getApp(){ return db.storage.addon.app; };
 
 exports.getSync = getSync;
 exports.getUser = getUser;
@@ -63,4 +72,4 @@ exports.storeSync = storeSync;
 exports.storeUser = storeUser;
 
 
-exports.init = init;
+//exports.init = init;

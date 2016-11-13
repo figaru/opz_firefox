@@ -8,18 +8,11 @@ const validate = require("./validate.js");
 function init() {
 	return new Promise(function (resolve, reject) {
         //check if user login details are already stored
-		checkCredentials().then(result => {
-			//retrieve session and uid
-			let syncData = db.getSync();
-
-			console.log(syncData);
-
-			//check if sync data available
-			if(!validate.hasNull(syncData)){
+        let syncData = db.getSync();
+		if(validateNotNull(syncData)){
 				let userData = db.getUser();
 
-				if(!validate.hasNull(userData)){
-					
+				if( validateNotNull(userData) ){
 					//retrieve app data - containign updated timestamp
 					var app = db.getApp();
 
@@ -44,14 +37,10 @@ function init() {
 						reject();
 					});
 				}
-			}else{
-				reject();
-			}
 
-		}).catch(error => {
-			console.log(error);
+		}else{
 			reject();
-		});
+		}
     });
 }
 
@@ -83,32 +72,31 @@ function userLogin(data){
 
 			//check if user login details are already stored
 			if(validateServerResult(result)){
-				let credential = JSON.parse(data.cred);
+				let cred = JSON.parse(data.cred);
+				result.data.username = cred.username;
+				db.storeSync(result.data);
 
-				//add Credentials
-				cred.store({
-				  realm: "Opz Addon",
-				  username: credential.username,
-				  password: credential.password,
-				  onComplete:function onComplete(data){
-				  	db.storeSync(result.data);
-
-					resolve(true);
-				  },
-				  onError: function onError(error){
-				  	console.log("failed");
-				  }
-				});
+				resolve();
 			}else{
 				reject();
 			}
 
 		}).catch(error => {
-			console.log(error);
 
 			reject(error);
 		});
 	});
+}
+
+function validateNotNull(data){
+	//check if sync data available
+	if(data && !validate.hasNull(data)){
+		return true;
+	}else{
+		console.log("failed to validate:");
+		console.log(data);
+		return false;
+	}
 }
 
 function validateServerResult(result){
@@ -119,98 +107,6 @@ function validateServerResult(result){
 		}else{
         	return false;
         }
-    });
-}
-
-function addCredentials(user, pass) {
-	return new Promise(function (resolve, reject) {
-		console.log(user);
-		console.log(pass);
-        cred.store({
-		  realm: "Opz Addon",
-		  username: user,
-		  password: pass,
-		  onComplete: function onComplete() {
-		    resolve("Credentials Added Successfuly!");
-		  },
-		  onError: function onError(err){
-		  	reject(err);
-		  }
-		});	
-    });
-}
-
-function updateCredentials(params) {
-	return new Promise(function (resolve, reject) {
-        cred.remove({
-		  realm: "Opz Addon",
-		  onComplete: function onComplete() {
-		    cred.store({
-			  realm: "Opz Addon",
-			  username: params.username,
-			  password: params.password,
-			  onComplete: function onComplete() {
-			    resolve("Credentials Added Successfuly!");
-			  },
-			  onError: function onError(err){
-			  	reject(err);
-			  }
-			});	
-		  },
-		  onError: function onError(err){
-		  	cred.store({
-			  realm: "Opz Addon",
-			  username: params.username,
-			  password: params.password,
-			  onComplete: function onComplete() {
-			    resolve("Credentials Added Successfuly!");
-			  },
-			  onError: function onError(err){
-			  	reject(err);
-			  }
-			});
-		  }
-		});
-    });
-}
-
-function checkCredentials() {
-	return new Promise(function (resolve, reject) {
-        cred.search({
-		    realm: "Opz Addon",
-		    onComplete: function onComplete(credentials) {
-		    	if(credentials[0].username){
-		    		if(credentials[0].password){
-			    		resolve(credentials[0].username);
-			    	}
-			    	reject(credentials[0].username);
-		    	}else{
-		    		reject("No credentials Found.");
-		    	}
-			},
-			onError: function(err){
-				reject("No credentials Found.");
-			}
-	    });
-    });
-}
-
-function getCredentials() {
-	return new Promise(function (resolve, reject) {
-        cred.search({
-		    realm: "Opz Addon",
-		    onComplete: function onComplete(credentials) {
-		    	credentials.forEach(function(credential) {
-		        	resolve({
-		        		username: credential.username,
-		        		password: credential.password,
-		        	});
-		        });
-			},
-			onError: function(error){
-
-			}
-	    });
     });
 }
 

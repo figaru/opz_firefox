@@ -1,5 +1,5 @@
 function startup(reason){
-
+	console.log(reason);
 	return reason;
 }
 
