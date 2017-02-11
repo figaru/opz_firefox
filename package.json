@@ -1,11 +1,11 @@
 {
-  "title": "Opz Firefox",
+  "title": "Opz.io Mozilla",
   "name": "opzfirefox",
-  "icon": "resource://@opzfirefox/data/img/icon_b.png",
+  "icon": "resource://@opzfirefox/data/img/icon_main.png",
   "version": "0.0.8",
-  "description": "Opz firefox addon",
+  "description": "Seamless Project Management",
   "main": "main.js",
-  "author": "Daniel Abrantes",
+  "author": "opz.io",
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
@@ -20,14 +20,14 @@
       "title": "Authentication",
       "description": "Server endpoint used for authenticating user login credentials. eg. https://domain.com/v1/login",
       "type": "string",
-      "value": "http://localhost:5000/api/v1/login"
+      "value": "https://api.opz.io/v1/auth?"
   },
   {
       "name": "endpoint_sync",
       "title": "Synchronization",
       "description": "Server endpoint used for synchronizing user settings. eg. https://domain.com/v1/sync",
       "type": "string",
-      "value": "http://localhost:5000/api/v1/sync"
+      "value": "https://api.opz.io/v1/sync?"
   },
   {
       "name": "endpoint_beat",
@@ -66,5 +66,28 @@
       "type": "bool",
       "value": false,
       "hidden": true
-  }]
+  },
+
+
+
+
+  {
+      "name": "session",
+      "title": "session",
+      "description": "The email of user. eg.test@test.com ",
+      "type": "string",
+      "value": "",
+      "hidden": true
+  },
+  {
+      "name": "uid",
+      "title": "uid",
+      "description": "The email of user. eg.test@test.com ",
+      "type": "string",
+      "value": "",
+      "hidden": true
+  }
+
+
+]
 }

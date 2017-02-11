@@ -13,6 +13,7 @@ function postRequest(beat, url){
         xhr.onload = () => {
             if (xhr.status === 200) {
                 // We can resolve the promise
+                console.log(xhr.response);
                 resolve(xhr.response);
             } else {
                 // It's a failure, so let's reject the promise
@@ -69,15 +70,19 @@ function loginRequest(data){
         var xhr = new XMLHttpRequest();
         data.cred = JSON.stringify(data.cred);
 
-        xhr.open('POST', data.url, true);
+        console.log(data.data);
+
+        xhr.open('POST', data.url + data.data, true);
         xhr.setRequestHeader("Content-type", "application/json");
 
         xhr.onload = () => {
             if (xhr.status === 200) {
                 // We can resolve the promise
+                console.log(xhr.response);
                 resolve(xhr.response);
             } else {
                 // It's a failure, so let's reject the promise
+                //console.log(xhr);
                 reject(xhr);
             }
         
@@ -88,7 +93,7 @@ function loginRequest(data){
             reject("Unable to load RSS");
         };
 
-        xhr.send(data.cred);
+        xhr.send();
     });
 }
 

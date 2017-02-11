@@ -35,7 +35,7 @@ panel.port.on("login", function(data){
 var button = ui.ActionButton({
   id: "opz-button",
   label: "opz.io",
-  icon: "./img/icon_b.png",
+  icon: "./img/icon_main.png",
   onClick: handleClick
 });
 

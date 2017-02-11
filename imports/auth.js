@@ -9,6 +9,8 @@ function init() {
 	return new Promise(function (resolve, reject) {
         //check if user login details are already stored
         let syncData = db.getSync();
+
+        console.log(syncData);
 		if(validateNotNull(syncData)){
 				let userData = db.getUser();
 

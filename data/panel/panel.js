@@ -36,13 +36,14 @@ $('document').ready(function() {
         event.preventDefault();
 
         let cred = {
-            username: $('#form-user').val(),
-            password: $('#form-pass').val(),
+            user: $('#form-user').val(),
+            pass: $('#form-pass').val(),
         }
 
         self.port.emit("login", {
             url: "",
             cred: cred,
+            data: $('#login-form').serialize()
         });
 
         return false;

@@ -38,6 +38,11 @@ if(!db.storage.addon){
 }
 
 function storeSync(data){
+
+	pref.set("session", data.authToken);
+	pref.set("uid", data.userId);
+
+
 	db.storage.addon.sync = {
 		session: data.authToken,
 		uid: data.userId,
@@ -60,7 +65,13 @@ function storeUser(data){
 }
 
 
-function getSync(){ return db.storage.addon.sync; };
+function getSync(){ 
+	let sync = {
+		session: pref.get("session"),
+		uid: pref.get("uid")
+	}
+	return sync; 
+};
 function getUser(){ return db.storage.addon.user; };
 function getApp(){ return db.storage.addon.app; };
 
